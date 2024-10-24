@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLanguageDto } from './dto/create-language.dto';
-import { UpdateLanguageDto } from './dto/update-language.dto';
+import { CreateLanguageDto } from './dtos/create-language.dto';
+import { UpdateLanguageDto } from './dtos/update-language.dto';
 import { PrismaService } from '@prisma';
-import { privateDecrypt } from 'crypto';
 
 @Injectable()
 export class LanguageService {

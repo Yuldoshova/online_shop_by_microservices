@@ -1,8 +1,7 @@
-import { Controller, ParseUUIDPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { LanguageService } from './language.service';
-import { CreateLanguageDto } from './dto/create-language.dto';
-import { UpdateLanguageDto } from './dto/update-language.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateLanguageDto, UpdateLanguageDto } from './dtos';
 
 @Controller('language')
 export class LanguageController {
@@ -22,7 +21,7 @@ export class LanguageController {
 
   @MessagePattern('getSingleLanguage')
   findOne(
-    @Payload('id', new ParseUUIDPipe({ version: '4' })) id: string
+    @Payload('id') id: string
   ) {
     return this.languageService.findOne(id);
   }
@@ -36,7 +35,7 @@ export class LanguageController {
 
   @MessagePattern('deleteLanguage')
   remove(
-    @Payload('id', new ParseUUIDPipe({ version: '4' })) id: string
+    @Payload('id') id: string
   ) {
     return this.languageService.remove(id);
   }
