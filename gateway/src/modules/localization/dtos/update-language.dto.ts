@@ -6,6 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UpdateLanguageDto extends PartialType(CreateLanguageDto) {
 
     @IsUUID()
+    @IsOptional()
     id?: string
 
     @ApiProperty({

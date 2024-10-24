@@ -12,7 +12,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalizationService } from './localization.service';
 import { CreateLanguageDto, UpdateLanguageDto } from './dtos';
 
-@ApiTags('Language Service')
+@ApiTags('Localization Service')
 @Controller('/localization')
 export class LocalizationController {
     constructor(private service: LocalizationService) { }
@@ -49,10 +49,10 @@ export class LocalizationController {
     }
 
     @ApiOperation({ summary: 'Delete language' })
-    @Delete('/languages/delete/:id')
+    @Delete('/languages/delete/:languageId')
     deleteLanguage(
-        @Param('id', new ParseUUIDPipe({ version: '4' })) id: string
+        @Param('languageId', new ParseUUIDPipe({ version: '4' })) languageId: string
     ) {
-        return this.service.deleteLanguage(id);
+        return this.service.deleteLanguage(languageId);
     }
 }

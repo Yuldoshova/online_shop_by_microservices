@@ -20,7 +20,7 @@ export class LanguageService {
   }
 
   async findAll() {
-    return await this.prisma.language.findMany();
+    return await this.prisma.language.findMany()
   }
 
   async findOne(id: string) {
@@ -29,16 +29,17 @@ export class LanguageService {
 
   async update(id: string, update: UpdateLanguageDto) {
     return await this.prisma.language.update({
+      where: { id },
       data: {
-        code: update.code,
+        code: update?.code,
         title: update.title,
-        image: update.image
-      },
-      where: { id }
+        image: update?.image
+      }
     })
   }
 
   async remove(id: string) {
+    console.log(id)
     return await this.prisma.language.delete({ where: { id } });
   }
 }

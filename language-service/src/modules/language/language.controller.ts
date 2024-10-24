@@ -21,7 +21,7 @@ export class LanguageController {
 
   @MessagePattern('getSingleLanguage')
   findOne(
-    @Payload('id') id: string
+    @Payload() id: string
   ) {
     return this.languageService.findOne(id);
   }
@@ -35,7 +35,7 @@ export class LanguageController {
 
   @MessagePattern('deleteLanguage')
   remove(
-    @Payload('id') id: string
+    @Payload() id: string
   ) {
     return this.languageService.remove(id);
   }
