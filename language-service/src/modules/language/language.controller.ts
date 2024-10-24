@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, ParseUUIDPipe } from '@nestjs/common';
 import { LanguageService } from './language.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('language')
 export class LanguageController {
-  constructor(private readonly languageService: LanguageService) {}
+  constructor(private readonly languageService: LanguageService) { }
 
-  @Post()
-  create(@Body() createLanguageDto: CreateLanguageDto) {
+  @MessagePattern('createLanguage')
+  create(
+    @Payload() createLanguageDto: CreateLanguageDto
+  ) {
     return this.languageService.create(createLanguageDto);
   }
 
-  @Get()
+  @MessagePattern('getAllLanguages')
   findAll() {
     return this.languageService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern('getSingleLanguage')
+  findOne(
+    @Payload('id', new ParseUUIDPipe({ version: '4' })) id: string
+  ) {
     return this.languageService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLanguageDto: UpdateLanguageDto) {
-    return this.languageService.update(id, updateLanguageDto);
+  @MessagePattern('updateLanguage')
+  update(
+    @Payload() updateLanguageDto: UpdateLanguageDto
+  ) {
+    return this.languageService.update(updateLanguageDto.id, updateLanguageDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern('deleteLanguage')
+  remove(
+    @Payload('id', new ParseUUIDPipe({ version: '4' })) id: string
+  ) {
     return this.languageService.remove(id);
   }
 }

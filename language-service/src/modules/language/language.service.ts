@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { PrismaService } from '@prisma';
+import { privateDecrypt } from 'crypto';
 
 @Injectable()
 export class LanguageService {
@@ -9,8 +10,14 @@ export class LanguageService {
     private prisma: PrismaService
   ) { }
 
-  create(create: CreateLanguageDto) {
-    return 'This action adds a new language';
+  async create(create: CreateLanguageDto) {
+    return await this.prisma.language.create({
+      data: {
+        code: create.code,
+        title: create.title,
+        image: create.image
+      }
+    });
   }
 
   async findAll() {
@@ -21,11 +28,18 @@ export class LanguageService {
     return await this.prisma.language.findFirst({ where: { id } });
   }
 
-  update(id: string, update: UpdateLanguageDto) {
-    return `This action updates a #${id} language`;
+  async update(id: string, update: UpdateLanguageDto) {
+    return await this.prisma.language.update({
+      data: {
+        code: update.code,
+        title: update.title,
+        image: update.image
+      },
+      where: { id }
+    })
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} language`;
+  async remove(id: string) {
+    return await this.prisma.language.delete({ where: { id } });
   }
 }
