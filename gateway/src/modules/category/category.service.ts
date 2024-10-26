@@ -1,12 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryClient } from './category.client';
+import { LocalizationService } from '../localization';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class CategoryService {
-  constructor(private categoryClient: CategoryClient) {}
+  constructor(private categoryClient: CategoryClient, private localizationService: LocalizationService) { }
 
-  getCategoryList() {
-    return this.categoryClient.getAllCategories();
+  async getCategoryList(languageCode: string) {
+    const categories = await firstValueFrom(this.categoryClient.getAllCategories())
+
+    for (let c of categories) {
+      const translate = await firstValueFrom(this.localizationService.getSingleTranslate({
+        translateId: c.name,
+        languageCode
+      }))
+      c.name = translate
+    }
+    return categories
   }
 
   getSingleCategory(id: number) {

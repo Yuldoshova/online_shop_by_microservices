@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Patch,
@@ -19,8 +20,10 @@ export class CategoryController {
 
   @ApiOperation({ summary: 'Get all categories' })
   @Get()
-  getCategories() {
-    return this.service.getCategoryList();
+  getCategories(
+    @Headers("accept-headers") languageCode:string
+  ) {
+    return this.service.getCategoryList(languageCode);
   }
 
   @ApiOperation({ summary: 'Get single category' })

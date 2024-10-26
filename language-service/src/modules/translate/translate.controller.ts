@@ -2,33 +2,41 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TranslateService } from './translate.service';
 import { CreateTranslateDto } from './dto/create-translate.dto';
 import { UpdateTranslateDto } from './dto/update-translate.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GetSingleTranslateDto } from './dto';
 
 @Controller('translate')
 export class TranslateController {
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(private readonly translateService: TranslateService) { }
 
-  @Post()
-  create(@Body() createTranslateDto: CreateTranslateDto) {
+  @MessagePattern('createTranslate')
+  create(
+    @Payload() createTranslateDto: CreateTranslateDto
+  ) {
     return this.translateService.create(createTranslateDto);
   }
 
-  @Get()
+  @MessagePattern('getAllTranslates')
   findAll() {
     return this.translateService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.translateService.findOne(+id);
+  @MessagePattern('getSingleTranslate')
+  findOne(
+    @Payload() payload: GetSingleTranslateDto
+  ) {
+    return this.translateService.findOne(payload);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTranslateDto: UpdateTranslateDto) {
-    return this.translateService.update(+id, updateTranslateDto);
+  @MessagePattern('updateTranslate')
+  update(
+    @Payload() updateTranslateDto: UpdateTranslateDto) {
+    return this.translateService.update(updateTranslateDto.id, updateTranslateDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.translateService.remove(+id);
+  @MessagePattern('deleteTranslate')
+  remove(
+    @Payload() id: string) {
+    return this.translateService.remove(id);
   }
 }

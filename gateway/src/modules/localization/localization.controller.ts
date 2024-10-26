@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    Headers,
     Param,
     ParseUUIDPipe,
     Patch,
@@ -10,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalizationService } from './localization.service';
-import { CreateLanguageDto, UpdateLanguageDto } from './dtos';
+import { CreateLanguageDto, CreateTranslateDto, UpdateLanguageDto, UpdateTranslateDto } from './dtos';
 
 @ApiTags('Localization Service')
 @Controller('/localization')
@@ -54,5 +55,45 @@ export class LocalizationController {
         @Param('languageId', new ParseUUIDPipe({ version: '4' })) languageId: string
     ) {
         return this.service.deleteLanguage(languageId);
+    }
+
+    @ApiOperation({ summary: 'Get all translates' })
+    @Get('/translates')
+    getTranslates() {
+        return this.service.getTranslateList();
+    }
+
+    @ApiOperation({ summary: 'Get single translate' })
+    @Get('/translates/:translateId')
+    getSingleTranslate(
+        @Param('translateId', new ParseUUIDPipe({ version: '4' })) translateId: string,
+        @Headers("accept-language") languageCode: string
+    ) {
+        return this.service.getSingleTranslate({ translateId, languageCode });
+    }
+
+    @ApiOperation({ summary: 'Create translate' })
+    @Post('/translates/add')
+    createTranslate(
+        @Body() payload: CreateTranslateDto
+    ) {
+        return this.service.createTranslate(payload);
+    }
+
+    @ApiOperation({ summary: 'Update translate' })
+    @Patch('/translates/update/:translateId')
+    updateTranslate(
+        @Param('translateId', new ParseUUIDPipe({ version: '4' })) translateId: string,
+        @Body() payload: UpdateTranslateDto,
+    ) {
+        return this.service.updateTranslate(translateId, payload);
+    }
+
+    @ApiOperation({ summary: 'Delete translate' })
+    @Delete('/translates/delete/:translateId')
+    deleteTranslate(
+        @Param('translateId', new ParseUUIDPipe({ version: '4' })) translateId: string
+    ) {
+        return this.service.deleteTranslate(translateId);
     }
 }

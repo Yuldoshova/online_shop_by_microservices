@@ -4,6 +4,7 @@ import {
     ClientProxyFactory,
     Transport,
 } from '@nestjs/microservices';
+import { CreateLanguageDto, CreateTranslateDto, UpdateLanguageDto, UpdateTranslateDto } from './dtos';
 
 @Injectable()
 export class LocalizationClient implements OnModuleInit {
@@ -23,7 +24,7 @@ export class LocalizationClient implements OnModuleInit {
         await this.client.connect();
     }
 
-    createLanguage(payload) {
+    createLanguage(payload:CreateLanguageDto) {
         return this.client.send('createLanguage', payload);
     }
 
@@ -35,11 +36,31 @@ export class LocalizationClient implements OnModuleInit {
         return this.client.send('getSingleLanguage', id);
     }
 
-    updateLanguage(payload) {
+    updateLanguage(payload:UpdateLanguageDto) {
         return this.client.send('updateLanguage', payload);
     }
 
     deleteLanguage(id: string) {
         return this.client.send('deleteLanguage', id);
+    }
+
+    createTranslate(payload:CreateTranslateDto) {
+        return this.client.send('createTranslate', payload);
+    }
+
+    getAllTranslates() {
+        return this.client.send('getAllTranslates', '');
+    }
+
+    getSingleTranslate(payload: { languageCode: string, translateId: string }) {
+        return this.client.send('getSingleTranslate', payload);
+    }
+
+    updateTranslate(payload:UpdateTranslateDto) {
+        return this.client.send('updateTranslate', payload);
+    }
+
+    deleteTranslate(id: string) {
+        return this.client.send('deleteTranslate', id);
     }
 }

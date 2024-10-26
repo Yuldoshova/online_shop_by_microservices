@@ -1,28 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { LocalizationClient } from './localization.client';
-import { CreateLanguageDto, UpdateLanguageDto } from './dtos';
+import { CreateLanguageDto, CreateTranslateDto, UpdateLanguageDto, UpdateTranslateDto } from './dtos';
 
 @Injectable()
 export class LocalizationService {
-    constructor(private languageClient: LocalizationClient) { }
+    constructor(private localizationClient: LocalizationClient) { }
 
     getLanguageList() {
-        return this.languageClient.getAllLanguages();
+        return this.localizationClient.getAllLanguages();
     }
 
     getSingleLanguage(id: string) {
-        return this.languageClient.getSingleLanguage(id);
+        return this.localizationClient.getSingleLanguage(id);
     }
 
     createLanguage(payload: CreateLanguageDto) {
-        return this.languageClient.createLanguage(payload);
+        return this.localizationClient.createLanguage(payload);
     }
 
     updateLanguage(id: string, update: UpdateLanguageDto) {
-        return this.languageClient.updateLanguage({ id, update });
+        return this.localizationClient.updateLanguage({ id, ...update });
     }
 
     deleteLanguage(id: string) {
-        return this.languageClient.deleteLanguage(id);
+        return this.localizationClient.deleteLanguage(id);
+    }
+
+    getTranslateList() {
+        return this.localizationClient.getAllTranslates();
+    }
+
+    getSingleTranslate(payload: { languageCode: string, translateId: string }) {
+        return this.localizationClient.getSingleTranslate(payload);
+    }
+
+    createTranslate(payload: CreateTranslateDto) {
+        return this.localizationClient.createTranslate(payload);
+    }
+
+    updateTranslate(id: string, update: UpdateTranslateDto) {
+        return this.localizationClient.updateTranslate({ id, ...update });
+    }
+
+    deleteTranslate(id: string) {
+        return this.localizationClient.deleteTranslate(id);
     }
 }
